@@ -73,8 +73,7 @@ def retry_on_timeout(func):
                 kwargs["timeouted"] = True
                 return func(*args, **kwargs)
             except Exception as e:
-                print e
-                print "Timeout. Retrying"
+                print >> sys.stderr, 'Connection timed out. Retrying ...'
                 retry += 1
     return wrapper
 
@@ -390,7 +389,7 @@ class GoogleQuery(QueryEngine):
                         if 'url' in first:
                                 return FileTools.download_image(first['url'])
         except Exception as e:
-            print e
+            print >> sys.stderr, "Error while fetching cover : %s."%(e)
             
         return ""
                         

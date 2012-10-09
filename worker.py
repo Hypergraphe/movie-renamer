@@ -45,20 +45,16 @@ class Worker(QtCore.QThread):
         self.cond.release()
 
     def run(self):
-        print "Worker initialized"
         while 1:
             self.cond.acquire()
             if self.exit:
                 break
             if self.job != None:
-                print "Job acquired"
                 try:
                     self.job(self.args, self.kwargs)                
                 except Exception as e:
                     print e
                     traceback.print_exc(file=sys.stdout)                    
                 self.job = None
-                print "Job teminated"
             self.cond.wait()
             self.cond.release()
-        print "Worker dead"

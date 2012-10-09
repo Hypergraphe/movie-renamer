@@ -30,8 +30,33 @@ class MRQListWidget(QListWidget, Observer):
     def set_model(self, moviemodel):
         self._moviemodel = moviemodel
         self._moviemodel.add_observer(self)
-
-
+    
+    # Drag n Drop        
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasUrls():
+            event.accept()
+        else:
+            event.ignore()
+        
+    def dragMoveEvent(self, event):
+        if event.mimeData().hasUrls():
+            event.setDropAction(QtCore.Qt.CopyAction)
+            event.accept()
+        else:
+            event.ignore()
+            
+    def dropEvent(self, event):
+        if event.mimeData().hasUrls():
+            event.setDropAction(QtCore.Qt.CopyAction)
+            event.accept()
+            links = []
+            for url in event.mimeData().urls():
+                links.append(unicode(url.toLocalFile()))
+            self.emit(QtCore.SIGNAL("dropped"), links)
+        else:
+            event.ignore()        
+    ##
+        
     def closeEditor(self, editor, hint):
         ret = super(QListView, self).closeEditor(editor, hint)
         item = self.currentItem()

@@ -21,7 +21,8 @@ from PyQt4.QtGui import QMainWindow, QFileDialog
 from PyQt4.QtGui import QListWidgetItem, QGraphicsScene, QIcon
 from guiwindow import Ui_MainWindow
 from moviemodel import *
-import time         
+import time
+from draggablepixmap import QDraggableGraphicsPixmapItem
         
 class Ui_MRMainWindow(Ui_MainWindow):
     def __init__(self, moviemodel, worker):
@@ -83,7 +84,13 @@ class Ui_MRMainWindow(Ui_MainWindow):
         QtCore.QObject.connect(self._main_window,
                                 QtCore.SIGNAL("statusmessage(QString)"), 
                                 self.update_status_bar)
-
+        
+        QtCore.QObject.connect(self.listView, 
+                               QtCore.SIGNAL("dropped"), 
+                               self.file_dropped)
+        
+    def file_dropped(self, links):
+            self.build_model_from_files(links)
 
     def load_movie_infos_in_view(self, item, previous):
         if item == None:
@@ -98,7 +105,7 @@ class Ui_MRMainWindow(Ui_MainWindow):
         if movie.get_cover() != "":
             pixmap = QtGui.QPixmap(movie.get_cover())
             pixmap = pixmap.scaled(self.movieCoverView.size())            
-            qitem = QtGui.QGraphicsPixmapItem(pixmap)                     
+            qitem = QDraggableGraphicsPixmapItem(movie.get_cover(), pixmap)                     
             self._graphic_scene.addItem(qitem)
 
     def add_files(self):

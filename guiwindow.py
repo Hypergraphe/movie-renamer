@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ihm.ui'
 #
-# Created: Tue Oct  9 19:18:01 2012
+# Created: Tue Oct  9 22:39:36 2012
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -19,6 +19,7 @@ class Ui_MainWindow(object):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
         MainWindow.setEnabled(True)
         MainWindow.resize(812, 728)
+        MainWindow.setAcceptDrops(True)
         MainWindow.setStatusTip(_fromUtf8(""))
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
@@ -46,10 +47,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.listView.sizePolicy().hasHeightForWidth())
         self.listView.setSizePolicy(sizePolicy)
         self.listView.setMinimumSize(QtCore.QSize(0, 200))
-        self.listView.setDragEnabled(True)
-        self.listView.setDragDropOverwriteMode(True)
-        self.listView.setDragDropMode(QtGui.QAbstractItemView.DropOnly)
-        self.listView.setDefaultDropAction(QtCore.Qt.CopyAction)
+        self.listView.setAcceptDrops(True)
         self.listView.setAlternatingRowColors(True)
         self.listView.setObjectName(_fromUtf8("listView"))
         self.verticalLayout_7.addWidget(self.listView)

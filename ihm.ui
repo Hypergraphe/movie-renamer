@@ -13,6 +13,9 @@
     <height>728</height>
    </rect>
   </property>
+  <property name="acceptDrops">
+   <bool>true</bool>
+  </property>
   <property name="windowTitle">
    <string>Movie Collection Renamer</string>
   </property>
@@ -60,17 +63,8 @@
             <height>200</height>
            </size>
           </property>
-          <property name="dragEnabled">
+          <property name="acceptDrops">
            <bool>true</bool>
-          </property>
-          <property name="dragDropOverwriteMode">
-           <bool>true</bool>
-          </property>
-          <property name="dragDropMode">
-           <enum>QAbstractItemView::DropOnly</enum>
-          </property>
-          <property name="defaultDropAction">
-           <enum>Qt::CopyAction</enum>
           </property>
           <property name="alternatingRowColors">
            <bool>true</bool>
