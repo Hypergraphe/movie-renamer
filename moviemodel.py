@@ -125,20 +125,22 @@ class MovieCollectionModel(Observable):
         
     def save_movie(self, movie):
         movie.set_saved()
+        movie.set_modified(False)
         FileTools.rename(movie)
         self.set_changed()
         self.notify_all(("update", movie))
         
     def reset_movie_informations(self, movie):
         movie.reset()
+        self.save_movie(movie)
         self.set_changed()
-        self.notify_all(("update", movie))
+        self.notify_all(("clear", movie))
        
 class GoogleImdbResultCandidate(object):
     """A candidate of a Google query on Imdb for a movie name"""
     def __init__(self, movie_name=u"", imdb_link=u"", 
                  description=u"", cover = u"", year=""):
-        self._title = movie_name
+        self._title = movie_name.strip()
         self._imdb_link = imdb_link
         self._description = description
         self._cover = cover
@@ -168,6 +170,8 @@ class GoogleImdbResultCandidate(object):
         return self._description
     
     def to_string(self):
+        if self.get_year() == "":
+            return self.get_title()
         return u"%s (%s)"%(self.get_title(),self.get_year())
 
     def __repr__(self):
@@ -178,14 +182,14 @@ class Movie(GoogleImdbResultCandidate):
     filesystem."""
     def __init__(self, filename, movie_name=u"", imdb_link=u"", description=u""):
         super(Movie, self).__init__(movie_name, imdb_link, description)
-        self._filename = unicode(filename)
+        self._filename = unicode(filename)        
         if movie_name == u"":
             ext = self.file_extension()
             if len(ext) != 0:
-                self._title = self.file_basename()[:-len(ext)-1]
+                self._title = self.file_basename()[:-len(ext)-1].strip()
             else:
-                self._title = self.file_basename()
-        self._movie_basename = self._title        
+                self._title = self.file_basename().strip()
+        self._movie_basename = self._title
         self._save = False
         self._modified = False
         
@@ -198,6 +202,9 @@ class Movie(GoogleImdbResultCandidate):
     def get_filename(self):
         """Accessor to get the movie filename on disk"""
         return self._filename
+    
+    def set_filename(self, name):
+        self._filename = name
     
     def movie_basename(self):
         return self._movie_basename
@@ -231,7 +238,7 @@ class Movie(GoogleImdbResultCandidate):
         self._modified = True
         
     def reset(self):
-        self._title = self.movie_basename()
+        self._title = os.path.splitext(self.movie_basename())[0]
         self._description = u""
         self._cover = u""
         self._imdb_link = u""
@@ -522,18 +529,24 @@ class FileTools(object):
     
     @staticmethod
     def create_tempdir():
+        """Create the application's temporary directory""" 
         if os.path.isdir(TMPDIR):
             FileTools.clean_tempfiles()
         os.makedirs(TMPDIR)
         
     @staticmethod
     def clean_tempfiles():
+        """Clean the application's temporary directory"""
         for fd in os.listdir(TMPDIR):
             os.remove(TMPDIR + fd)
         os.rmdir(TMPDIR)               
         
     @staticmethod    
     def download_image(url):
+        """Fetch image at url and copy it in the 
+        application temporary directory.
+        Returns the path to the local image or empty 
+        string if not found."""
         if url != "":
             fname = TMPDIR + os.path.basename(url)
             response = urllib2.urlopen(url)
@@ -550,6 +563,9 @@ class FileTools(object):
 
     @staticmethod
     def recurse_files(ifiles):
+        """Get recursively all media files of a directory and 
+        its subdirectories. Media files are recognized 
+        thanks to their extension.""" 
         files = []
         for f in ifiles:
             if path.isdir(f):
@@ -564,17 +580,19 @@ class FileTools(object):
         return files
 
     @staticmethod
-    def preprocess_query(moviename):       
+    def preprocess_query(moviename):
+        """Heuristic used to clean a movie title. 
+        Removing tags, sub informations, etc."""       
         moviename = re.sub("[\.\-\_\~@]"," ", moviename)
         moviename = re.sub("[ ]+"," ", moviename)
         moviename = re.sub("[\&]","and", moviename)
         moviename = moviename.lower()
 
-        # Virer le tag de la team s'il est prefixe
+        # Team tag removing
         motif = "[\[\(\{\<][^\]\)\}\>]+[\]\)\}\>]"
         moviename = re.sub(motif, "", moviename)
         
-        # Tant qu'on rencontre pas {[(< ni un stop word on continue
+        # Continue until a stopword is found.
         tmp = re.findall("[^\(\[\{\<]+", moviename)
         if len(tmp) > 0:
             moviename = tmp[0]
@@ -589,10 +607,15 @@ class FileTools(object):
 
     @staticmethod
     def rename(movie):
-        #new = candidate.get_title() + "." + movie.file_extension()
-        #new_file_name = os.path.join(movie.file_dirname(), new)
-        old = movie.get_filename()
-        new =  os.path.join(movie.file_dirname(), movie.get_title() + "." + movie.file_extension())
-#        print old + " -> " + new
-        movie._filename = new               
-        os.rename(movie.get_filename(),  os.path.join(movie.file_dirname(), movie.get_title() + "." + movie.file_extension()))
+        """Rename a movie based on its current title"""
+        dirname = os.path.dirname(movie.get_filename())
+        ext = os.path.splitext(os.path.basename(movie.get_filename()))[1]
+        ext = ext.lower()
+        newfilename = "%s/%s%s"%(dirname, movie.to_string(), ext)
+                
+        print "Current file : %s"%(movie.get_filename())
+        print "Rename       : %s"%(newfilename)
+        
+        movie.set_filename(newfilename)
+        
+        

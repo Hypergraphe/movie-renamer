@@ -65,6 +65,9 @@ class MRQListWidget(QListWidget, Observer):
         if action == "update":
             item = self.movie_to_item[key]
             item.setText(key.to_string())
+            if key.has_been_saved():
+                if key.has_changed():
+                    key.set_saved(False)
             self.apply_item_style(key, item)
             if item in self.selectedItems():
                 self.emit(QtCore.SIGNAL(\
@@ -73,12 +76,16 @@ class MRQListWidget(QListWidget, Observer):
             
         if action == "clear":
             item = self.movie_to_item[key]
-            item.setText(key.file_basename())
-            movie.set_modified(False)
+            item.setText(key.get_title())
+            key.set_modified(False)
+            key.set_saved(False)
             self.apply_item_style(key, item)   
     
     def apply_item_style(self, movie, item):
         font = item.font()
         font.setBold(movie.has_changed())
-        font.setItalic(movie.has_been_saved())
+        font.setItalic(False)
+        if movie.has_been_saved():
+            item.setText(item.text()+ " [saved]")
+            font.setItalic(True)
         item.setFont(font)

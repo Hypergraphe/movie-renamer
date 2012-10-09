@@ -18,7 +18,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from PyQt4 import QtCore, QtGui, Qt
 from PyQt4.QtGui import QMainWindow, QFileDialog
-from PyQt4.QtGui import QListWidgetItem, QGraphicsScene
+from PyQt4.QtGui import QListWidgetItem, QGraphicsScene, QIcon
 from guiwindow import Ui_MainWindow
 from moviemodel import *
 import time         
@@ -46,23 +46,23 @@ class Ui_MRMainWindow(Ui_MainWindow):
                                QtCore.SIGNAL("currentItemChanged(QListWidgetItem *,QListWidgetItem *)"),
                                self.load_movie_infos_in_view)
 
-        QtCore.QObject.connect(self.actionAjouter_Des_Fichiers, 
+        QtCore.QObject.connect(self.actionAddFiles, 
                                QtCore.SIGNAL("triggered()"), 
                                self.add_files)
 
-        QtCore.QObject.connect(self.actionAjouter_un_dossier,
+        QtCore.QObject.connect(self.actionAddDirectory,
                                QtCore.SIGNAL("triggered()"), 
                                 self.add_directory)
 
-        QtCore.QObject.connect(self.actionLaunch_rename_assistant,
+        QtCore.QObject.connect(self.actionLaunchRenameAssistant,
                                QtCore.SIGNAL("triggered()"), 
                                self.do_compute)
         
-        QtCore.QObject.connect(self.actionLaunch_from_selection,
+        QtCore.QObject.connect(self.actionLaunchFromSelection,
                                QtCore.SIGNAL("triggered()"), 
                                self.do_compute_from_selection)
 
-        QtCore.QObject.connect(self.actionEnregistrer,
+        QtCore.QObject.connect(self.actionSave,
                                QtCore.SIGNAL("triggered()"), 
                                self.do_batch_save)
 
@@ -83,6 +83,7 @@ class Ui_MRMainWindow(Ui_MainWindow):
         QtCore.QObject.connect(self._main_window,
                                 QtCore.SIGNAL("statusmessage(QString)"), 
                                 self.update_status_bar)
+
 
     def load_movie_infos_in_view(self, item, previous):
         if item == None:
@@ -146,8 +147,6 @@ class Ui_MRMainWindow(Ui_MainWindow):
 
         if res == save:
             self._moviemodel.save_movie(movie)
-            item.setText(item.text() + "[saved]")
-            self.listView.apply_item_style(item)
 
         if res == remove:
             self._moviemodel.remove_movie(movie)
@@ -253,11 +252,11 @@ class Ui_MRMainWindow(Ui_MainWindow):
     def do_batch_save(self):
         self.worker.do(self.do_batch_save_sub)
 
-    def do_batch_save_sub(self, dummy):
+    def do_batch_save_sub(self, args, kwargs):
         data = self._moviemodel.data()
-        for i in xrange(len(data)):
-            movie = data[i]
-            self._moviemodel.save_movie(movie)
+        for movie in data:
+            if movie.has_changed():
+                self._moviemodel.save_movie(movie)
 
     def canceljob(self):
         self.job_canceled = True
