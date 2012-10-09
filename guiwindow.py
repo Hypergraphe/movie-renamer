@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ihm.ui'
 #
-# Created: Tue Oct  9 15:23:59 2012
+# Created: Tue Oct  9 16:06:17 2012
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -222,12 +222,12 @@ class Ui_MainWindow(object):
         self.actionAjouter_un_dossier.setText(QtGui.QApplication.translate("MainWindow", "Add directory", None, QtGui.QApplication.UnicodeUTF8))
         self.actionSoumettre_les_hashs.setText(QtGui.QApplication.translate("MainWindow", "Submit hashes", None, QtGui.QApplication.UnicodeUTF8))
         self.actionEnregistrer.setText(QtGui.QApplication.translate("MainWindow", "Save", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionLaunch_rename_assistant.setText(QtGui.QApplication.translate("MainWindow", "Batch rename", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionLaunch_rename_assistant.setText(QtGui.QApplication.translate("MainWindow", "Rename assistant", None, QtGui.QApplication.UnicodeUTF8))
         self.actionQuit.setText(QtGui.QApplication.translate("MainWindow", "Quit", None, QtGui.QApplication.UnicodeUTF8))
         self.actionQuit.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+Q", None, QtGui.QApplication.UnicodeUTF8))
         self.action_propos.setText(QtGui.QApplication.translate("MainWindow", "About", None, QtGui.QApplication.UnicodeUTF8))
         self.actionCompute_hashes.setText(QtGui.QApplication.translate("MainWindow", "Compute hashes", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionLaunch_from_selection.setText(QtGui.QApplication.translate("MainWindow", "Batch rename from selection", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionLaunch_from_selection.setText(QtGui.QApplication.translate("MainWindow", "Rename assistant from current selection", None, QtGui.QApplication.UnicodeUTF8))
         self.actionEttings.setText(QtGui.QApplication.translate("MainWindow", "Settings", None, QtGui.QApplication.UnicodeUTF8))
         self.actionImport_a_file.setText(QtGui.QApplication.translate("MainWindow", "Import a file", None, QtGui.QApplication.UnicodeUTF8))
         self.actionImport_a_directory.setText(QtGui.QApplication.translate("MainWindow", "Import a directory", None, QtGui.QApplication.UnicodeUTF8))

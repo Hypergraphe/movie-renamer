@@ -30,10 +30,11 @@ class Worker(QtCore.QThread):
         self.exit = False
         self.daemon = True
     
-    def do(self, job, *args):
+    def do(self, job, *args, **kwargs):
         self.cond.acquire()
         self.job = job
         self.args = args
+        self.kwargs = kwargs
         self.cond.notify()
         self.cond.release()
 
@@ -52,7 +53,7 @@ class Worker(QtCore.QThread):
             if self.job != None:
                 print "Job acquired"
                 try:
-                    self.job(self.args)                
+                    self.job(self.args, self.kwargs)                
                 except Exception as e:
                     print e
                     traceback.print_exc(file=sys.stdout)                    

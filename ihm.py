@@ -57,6 +57,10 @@ class Ui_MRMainWindow(Ui_MainWindow):
         QtCore.QObject.connect(self.actionLaunch_rename_assistant,
                                QtCore.SIGNAL("triggered()"), 
                                self.do_compute)
+        
+        QtCore.QObject.connect(self.actionLaunch_from_selection,
+                               QtCore.SIGNAL("triggered()"), 
+                               self.do_compute_from_selection)
 
         QtCore.QObject.connect(self.actionEnregistrer,
                                QtCore.SIGNAL("triggered()"), 
@@ -186,7 +190,10 @@ class Ui_MRMainWindow(Ui_MainWindow):
             self.load_movie_infos_in_view(item, None)
             
     def do_compute(self):
-        self.worker.do(self.do_compute_sub)      
+        self.worker.do(self.do_compute_sub)
+        
+    def do_compute_from_selection(self):
+        self.worker.do(self.do_compute_sub, selection=True)  
         
     def update_progress_bar(self, val):
         self.progressBar.setProperty("value", val)
@@ -194,7 +201,7 @@ class Ui_MRMainWindow(Ui_MainWindow):
     def update_status_bar(self, val):
         self.statusbar.showMessage(val)
 
-    def do_compute_sub(self, movie=()):
+    def do_compute_sub(self, movie=(), selection=False):
         self.job_canceled = False
         self._set_enable_toolbar(False)
         self._main_window.emit(QtCore.SIGNAL("statusmessage(QString)"), 
@@ -204,8 +211,16 @@ class Ui_MRMainWindow(Ui_MainWindow):
         allocine_engine = AllocineQuery()
         google_engine = GoogleQuery()
         movies = self._moviemodel.data()
+        
         if movie != ():
             movies = [movie[0]]
+        
+        if selection:
+            indexes = self.listView.selectedIndexes()
+            if len(indexes) > 0:
+                firstindex = indexes[0]
+                movies = movies[firstindex.row():]
+            
         for i in xrange(len(movies)):
             if self.job_canceled:
                 self._main_window.emit(QtCore.SIGNAL("statusmessage(QString)"), 

@@ -372,19 +372,19 @@ class GoogleQuery(QueryEngine):
                          query,  
                          headers=headers,
                          server="ajax.googleapis.com")
-        
-        r = json.loads(r, "utf-8")
-        if 'responseData' in r:
-            response = r['responseData']
-            if 'results' in response:
-                results = response['results']
-                if len(results) > 0 :
-                    first = results[0]
-                    if 'url' in first:
-                        try:
-                            return FileTools.download_image(first['url'])
-                        except Exception as e:
-                            print e
+        try:
+            r = json.loads(r, "utf-8")
+            if 'responseData' in r:
+                response = r['responseData']
+                if 'results' in response:
+                    results = response['results']
+                    if len(results) > 0 :
+                        first = results[0]
+                        if 'url' in first:
+                                return FileTools.download_image(first['url'])
+        except Exception as e:
+            print e
+            
         return ""
                         
 class AllocineQuery(QueryEngine):

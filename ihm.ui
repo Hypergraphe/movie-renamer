@@ -337,7 +337,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Batch rename</string>
+    <string>Rename assistant</string>
    </property>
   </action>
   <action name="actionQuit">
@@ -366,7 +366,7 @@
   </action>
   <action name="actionLaunch_from_selection">
    <property name="text">
-    <string>Batch rename from selection</string>
+    <string>Rename assistant from current selection</string>
    </property>
   </action>
   <action name="actionEttings">
