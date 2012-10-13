@@ -19,22 +19,23 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from PyQt4.QtGui import QApplication, QMainWindow
-from ihm import *
-from moviemodel import *
-from worker import Worker
+from view.ihm import Ui_MRMainWindow
+from model.moviemodel import MovieCollectionModel
+from tools.worker import Worker
+import sys
+from tools.ApplicationManager import ApplicationContextManger
 
 if __name__ == "__main__":
-    FileTools.create_tempdir()  
-    moviemodel = MovieCollectionModel()
-    app = QApplication(sys.argv)
-    window = QMainWindow()
-    worker = Worker()
-    worker.start()
-    ui = Ui_MRMainWindow(moviemodel, worker)
-    ui.setupUi(window)
-    window.show()
-    ret = app.exec_()
-    ui.job_canceled = True
-    worker.die()
-    FileTools.clean_tempfiles()
+    with ApplicationContextManger():
+        moviemodel = MovieCollectionModel()
+        app = QApplication(sys.argv)
+        window = QMainWindow()
+        worker = Worker()
+        worker.start()
+        ui = Ui_MRMainWindow(moviemodel, worker)
+        ui.setupUi(window)
+        window.show()
+        ret = app.exec_()
+        ui.job_canceled = True
+        worker.die()
     sys.exit(ret)

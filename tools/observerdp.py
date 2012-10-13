@@ -15,8 +15,10 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-"""Observable/Observer Design pattern implementation"""
+
+
 class Observable(object):
+    """Observable/Observer Design pattern implementation"""
     def __init__(self):
         self._observers = []
         self._has_changed = False
@@ -24,11 +26,11 @@ class Observable(object):
     def add_observer(self, observer):
         if observer not in self._observers:
             self._observers.append(observer)
-    
+
     def remove_observer(self, observer):
         if observer in self._observers:
             self._observers.remove(observer)
-    
+
     def set_changed(self):
         self._has_changed = True
 
@@ -40,12 +42,12 @@ class Observable(object):
             for observer in self._observers:
                 observer.update(subject)
             self._has_changed = False
-    
+
 
 class Observer(object):
+    """Observable/Observer Design pattern implementation"""
     def __init__(self):
         pass
 
     def update(self, subject):
         pass
-    

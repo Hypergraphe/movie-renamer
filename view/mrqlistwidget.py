@@ -17,34 +17,34 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from PyQt4.QtGui import QListWidget, QListView, QListWidgetItem
 from PyQt4 import QtCore
-from moviemodel import GoogleImdbResultCandidate
-from observerdp import Observer
+from model.moviemodel import GoogleImdbResultCandidate
+from tools.observerdp import Observer
 
 
 class MRQListWidget(QListWidget, Observer):
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         super(MRQListWidget, self).__init__(parent)
         self.item_to_movie = {}
         self.movie_to_item = {}
-                
+
     def set_model(self, moviemodel):
         self._moviemodel = moviemodel
         self._moviemodel.add_observer(self)
-    
-    # Drag n Drop        
+
+    # Drag n Drop
     def dragEnterEvent(self, event):
         if event.mimeData().hasUrls():
             event.accept()
         else:
             event.ignore()
-        
+
     def dragMoveEvent(self, event):
         if event.mimeData().hasUrls():
             event.setDropAction(QtCore.Qt.CopyAction)
             event.accept()
         else:
             event.ignore()
-            
+
     def dropEvent(self, event):
         if event.mimeData().hasUrls():
             event.setDropAction(QtCore.Qt.CopyAction)
@@ -54,9 +54,9 @@ class MRQListWidget(QListWidget, Observer):
                 links.append(unicode(url.toLocalFile()))
             self.emit(QtCore.SIGNAL("dropped"), links)
         else:
-            event.ignore()        
+            event.ignore()
     ##
-        
+
     def closeEditor(self, editor, hint):
         ret = super(QListView, self).closeEditor(editor, hint)
         item = self.currentItem()
@@ -67,7 +67,7 @@ class MRQListWidget(QListWidget, Observer):
                 movie.get_imdb_link(),
                 movie.get_desc(),
                 movie.get_cover()))
-        
+
         return ret
 
     def update(self, subject):
@@ -81,12 +81,12 @@ class MRQListWidget(QListWidget, Observer):
             self.item_to_movie[item] = movie
             self.movie_to_item[movie] = item
 
-        if action == "remove":          
+        if action == "remove":
             item = self.movie_to_item[key]
             self.takeItem(self.row(item))
             self.item_to_movie.pop(item)
             self.movie_to_item.pop(key)
-                        
+
         if action == "update":
             item = self.movie_to_item[key]
             item.setText(key.to_string())
@@ -98,19 +98,19 @@ class MRQListWidget(QListWidget, Observer):
                 self.emit(QtCore.SIGNAL(\
                 "currentItemChanged(QListWidgetItem *,QListWidgetItem *)"),
                           item, item)
-            
+
         if action == "clear":
             item = self.movie_to_item[key]
             item.setText(key.get_title())
             key.set_modified(False)
             key.set_saved(False)
-            self.apply_item_style(key, item)   
-    
+            self.apply_item_style(key, item)
+
     def apply_item_style(self, movie, item):
         font = item.font()
         font.setBold(movie.has_changed())
         font.setItalic(False)
         if movie.has_been_saved():
-            item.setText(item.text()+ " [saved]")
+            item.setText(item.text() + " [saved]")
             font.setItalic(True)
         item.setFont(font)

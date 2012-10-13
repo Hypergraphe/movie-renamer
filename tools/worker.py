@@ -16,11 +16,14 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# TODO use a Queue to manage producer/consumer see: http://code.activestate.com/recipes/577187-python-thread-pool/
+# TODO use a Queue to manage producer/consumer see:
+# http://code.activestate.com/recipes/577187-python-thread-pool/
 
 from PyQt4 import QtCore
 from threading import Condition
-import sys, traceback
+import sys
+import traceback
+
 
 class Worker(QtCore.QThread):
     def __init__(self):
@@ -29,7 +32,7 @@ class Worker(QtCore.QThread):
         self.job = None
         self.exit = False
         self.daemon = True
-    
+
     def do(self, job, *args, **kwargs):
         self.cond.acquire()
         self.job = job
@@ -51,10 +54,10 @@ class Worker(QtCore.QThread):
                 break
             if self.job != None:
                 try:
-                    self.job(self.args, self.kwargs)                
+                    self.job(self.args, self.kwargs)
                 except Exception as e:
                     print e
-                    traceback.print_exc(file=sys.stdout)                    
+                    traceback.print_exc(file=sys.stdout)
                 self.job = None
             self.cond.wait()
             self.cond.release()
