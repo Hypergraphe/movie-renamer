@@ -15,8 +15,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor,
-# Boston, MA 02110-1301, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 import sys
 import os.path
@@ -38,8 +37,6 @@ elif os.environ.get('KDE_FULL_SESSION'):
 else:
     _current_theme = None
 
-print _current_theme
-
 ICON_SIZE_MENU = ('16x16',)
 ICON_SIZE_TOOLBAR = ('22x22',)
 ICON_SIZE_ALL = ('22x22', '16x16')
@@ -52,12 +49,10 @@ def lookup(name, size=ICON_SIZE_ALL):
                 fullpath = os.path.join(path, _current_theme, size[0], subdir, name)
                 if os.path.exists(fullpath + '.png'):
                     icon.addFile(fullpath + '.png')
-                    print fullpath
-                    print fullpath + '.png'
                     for s in size[1:]:
                         icon.addFile(os.path.join(path, _current_theme, s, subdir, name) + '.png')
-                        print os.path.join(path, _current_theme, s, subdir, name) + '.png'
                     return icon
     for s in size:
         icon.addFile('/'.join([':', 'images', s, name]) + '.png')
+        print '/'.join([':', 'images', s, name]) + '.png'
     return icon

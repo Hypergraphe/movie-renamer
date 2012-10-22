@@ -23,7 +23,7 @@ from guiwindow import Ui_MainWindow
 from model.moviemodel import *
 import time
 from draggablepixmap import QDraggableGraphicsPixmapItem
-import icontheme
+import tools.icontheme
 from config import EXTENSIONS, SLEEP
 
 
@@ -40,8 +40,11 @@ class Ui_MRMainWindow(Ui_MainWindow):
         self._graphic_scene = QGraphicsScene()
         self.movieCoverView.setScene(self._graphic_scene)
 
-        self.actionAddFiles.setIcon(icontheme.lookup("add",
-                                        icontheme.ICON_SIZE_TOOLBAR))
+        self.draw_toolbar()
+
+        QtCore.QObject.connect(self.actionQuit,
+                               QtCore.SIGNAL("triggered()"),
+                               QtCore.QCoreApplication.instance().quit)
 
         QtCore.QObject.connect(self.listView,
                                 QtCore.SIGNAL("itemClicked(QListWidgetItem *)"),
@@ -93,6 +96,20 @@ class Ui_MRMainWindow(Ui_MainWindow):
         QtCore.QObject.connect(self.listView,
                                QtCore.SIGNAL("dropped"),
                                self.file_dropped)
+    def draw_toolbar(self):
+        actions = [self.actionAddFiles,
+                   self.actionAddDirectory,
+                   self.actionLaunchRenameAssistant,
+                   self.actionLaunchFromSelection,
+                   self.actionSave,
+                   self.actionQuit]
+        for action in actions:
+            button = QtGui.QToolButton()
+            button.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
+            button.addAction(action)
+            button.setDefaultAction(action)
+            self.toolBar.addWidget(button)
+        self.toolBar.show()
 
     def file_dropped(self, links):
             self.build_model_from_files(links)

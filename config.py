@@ -1,4 +1,4 @@
-TMPDIR = '/tmp/media-renamer/'
+TMPDIR = '/tmp/movie-renamer/'
 WORDSLIMIT = 4
 NUMRES = 3
 OS = False

@@ -25,7 +25,7 @@ import os
 import httplib
 import htmlentitydefs
 import json
-from BeautifulSoup import BeautifulSoup, BeautifulStoneSoup
+from tools.BeautifulSoup import BeautifulSoup, BeautifulStoneSoup
 from tools.observerdp import Observable
 import urlparse
 from tools.FileTools import FileTools
@@ -303,8 +303,8 @@ class GoogleQuery(QueryEngine):
         data = []
         number = 0
         for item in res:
-            if u"class" in item:
-                if item[u"class"] == u"g":
+            if hasattr(item, u"class"):
+                if item.get(u"class") == u"g":
                     if number >= NUMRES:
                         break
                     number += 1

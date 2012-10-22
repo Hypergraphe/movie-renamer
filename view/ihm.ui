@@ -278,8 +278,8 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionImportAFile"/>
-    <addaction name="actionImportADirectory"/>
+    <addaction name="actionAddFiles"/>
+    <addaction name="actionAddDirectory"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -307,15 +307,12 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionAddFiles"/>
-   <addaction name="actionAddDirectory"/>
-   <addaction name="separator"/>
-   <addaction name="actionLaunchRenameAssistant"/>
-   <addaction name="actionLaunchFromSelection"/>
-   <addaction name="separator"/>
-   <addaction name="actionSave"/>
   </widget>
   <action name="actionAddDirectory">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/icons/document-open.svg</normaloff>:/icons/icons/document-open.svg</iconset>
+   </property>
    <property name="text">
     <string>Add directory</string>
    </property>
@@ -323,6 +320,10 @@
   <action name="actionSave">
    <property name="enabled">
     <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/icons/document-save.svg</normaloff>:/icons/icons/document-save.svg</iconset>
    </property>
    <property name="text">
     <string>Save All</string>
@@ -332,11 +333,19 @@
    <property name="enabled">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/icons/system-run.svg</normaloff>:/icons/icons/system-run.svg</iconset>
+   </property>
    <property name="text">
     <string>Rename assistant</string>
    </property>
   </action>
   <action name="actionQuit">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/icons/system-shutdown.svg</normaloff>:/icons/icons/system-shutdown.svg</iconset>
+   </property>
    <property name="text">
     <string>Quit</string>
    </property>
@@ -353,8 +362,15 @@
    </property>
   </action>
   <action name="actionLaunchFromSelection">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/icons/media-playback-start.svg</normaloff>:/icons/icons/media-playback-start.svg</iconset>
+   </property>
    <property name="text">
-    <string>Rename assistant from current selection</string>
+    <string>Rename from current selection</string>
+   </property>
+   <property name="toolTip">
+    <string>Rename from current selection</string>
    </property>
   </action>
   <action name="actionSettings">
@@ -373,10 +389,20 @@
    </property>
   </action>
   <action name="actionAddFiles">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/icons/add.svg</normaloff>:/icons/icons/add.svg</iconset>
+   </property>
    <property name="text">
     <string>Add Files</string>
    </property>
    <property name="toolTip">
+    <string>Add Files</string>
+   </property>
+   <property name="statusTip">
+    <string>Add Files</string>
+   </property>
+   <property name="whatsThis">
     <string>Add Files</string>
    </property>
   </action>
@@ -388,6 +414,8 @@
    <header>mrqlistwidget</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
